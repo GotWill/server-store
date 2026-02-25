@@ -28,17 +28,12 @@ type CartItem = {
   product: Product;
   quantity: number;
 };
-
-app.get("/", async (req, res) => {
-  res.send({ message: "ola" });
-});
-
 app.post("/create-session", async (req, res) => {
   const products = req.body as CartItem[];
 
   const customer = await stripe.checkout.sessions.create({
-    cancel_url: "http://localhost:5173/",
-    success_url: "http://localhost:5173/success",
+    cancel_url: `${process.env.BASE_URL}`,
+    success_url: `${process.env.BASE_URL}/success`,
     mode: "payment",
     line_items: products.map(({ product, quantity }) => {
       return {
